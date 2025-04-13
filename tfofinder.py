@@ -211,20 +211,9 @@ if __name__ == "__main__":
     dff1 = count_ds_R.to_csv(mb_userpath / f"{fname}_test3.csv", sep=',')
     dff2 = pd.read_csv(mb_userpath / f"{fname}_test3.csv", sep = ',')
 
-
-   # if os.name == 'posix': # macOS (and Linux)
-   #     col_name = 'baseno'
-   # elif os.name == 'nt': # Windows
-   #     col_name = 'Unnamed: 0'
-   # else:
-   #     raise ValueError("Unsupported operating system")
-
     count_ds_R2 = dff2.sort_values(by=['Unnamed: 0'])
     df = count_ds_R2.to_csv(mb_userpath / f"{fname}_count_Rs_so.csv", index = False)
     df1 = pd.read_csv(mb_userpath / f"{fname}_count_Rs_so.csv")
-
-
-    
    
     df1['index_diff'] = df1['Unnamed: 0'].diff()
     consec_pick = df1.loc[(df1['index_diff'] == 1)]
@@ -237,7 +226,6 @@ if __name__ == "__main__":
     consec_pick1.to_csv(mb_userpath / f"{fname}_all_consec_{str(probe)}.csv", index = False)   # Include user input value in the filename
     consec_pick2 = consec_pick1.loc[consec_pick1['index_consec']==pick]
     consec_pick2.to_csv(mb_userpath / f"{fname}_final_{str(probe)}_consec.txt", index = False)
-
 
     with open(mb_userpath / f"{fname}_all_probes.csv") as f, open(mb_userpath / f"{fname}_final_{str(probe)}_consec.txt", 'r') as f1, open(mb_userpath / f"{fname}_TFO_probes.txt", 'a') as f2:
         next(f)
