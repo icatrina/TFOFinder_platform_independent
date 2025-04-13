@@ -203,6 +203,8 @@ if __name__ == "__main__":
         for row in rows:
             writer.writerow(row)
 
+    col_name = ["baseno", "Unnamed: 0"]
+    
     mb_pick2 = pd.read_csv(mb_userpath / f"{fname}_base_file.csv", sep=',', usecols=[0,1,4])
     mb_pick3 = mb_pick.loc[(mb_pick2['bs_bind']>0) & (mb_pick2['base'] == "G") | (mb_pick2['base'] == "A") &
                                (mb_pick2['bs_bind']>0)]
@@ -210,16 +212,16 @@ if __name__ == "__main__":
     count_ds_R = mb_pick3['baseno'].value_counts()
     dff1 = count_ds_R.to_csv(mb_userpath / f"{fname}_test3.csv", sep=',')
     dff2 = pd.read_csv(mb_userpath / f"{fname}_test3.csv", sep = ',')
-    count_ds_R2 = dff2.sort_values(by=['Unnamed: 0'])
+    count_ds_R2 = dff2.sort_values(by=[col_name])
     df = count_ds_R2.to_csv(mb_userpath / f"{fname}_count_Rs_so.csv", index = False)
     df1 = pd.read_csv(mb_userpath / f"{fname}_count_Rs_so.csv")
-    df1['index_diff'] = df1['Unnamed: 0'].diff() 
+    df1['index_diff'] = df1[col_name].diff() 
     consec_pick = df1.loc[(df1['index_diff']==1)] 
     consec_pick.to_csv(mb_userpath / f"{fname}_all_consecutives.csv", index = False)
     consec_pick1 = pd.read_csv(mb_userpath / f"{fname}_all_consecutives.csv")
 
     pick = probe-2
-    consec_pick1['index_consec'] = consec_pick1['Unnamed: 0'].diff(periods=pick)
+    consec_pick1['index_consec'] = consec_pick1[col_name].diff(periods=pick)
     consec_pick1.to_csv(mb_userpath / f"{fname}_all_consec_{str(probe)}.csv", index = False)   # Include user input value in the filename
     consec_pick2 = consec_pick1.loc[consec_pick1['index_consec']==pick]
     consec_pick2.to_csv(mb_userpath / f"{fname}_final_{str(probe)}_consec.txt", index = False)
