@@ -203,7 +203,14 @@ if __name__ == "__main__":
         for row in rows:
             writer.writerow(row)
 
-    col_name = ["baseno", "Unnamed: 0"]
+    
+    if 'baseno' in df.columns:
+        col_name = 'baseno'
+    elif 'Unnamed: 0' in df.columns:
+        col_name = 'Unnamed: 0'
+    else:
+        raise KeyError("Neither 'baseno' nor 'Unnamed: 0' found in DataFrame")
+
     
     mb_pick2 = pd.read_csv(mb_userpath / f"{fname}_base_file.csv", sep=',', usecols=[0,1,4])
     mb_pick3 = mb_pick.loc[(mb_pick2['bs_bind']>0) & (mb_pick2['base'] == "G") | (mb_pick2['base'] == "A") &
@@ -212,7 +219,7 @@ if __name__ == "__main__":
     count_ds_R = mb_pick3['baseno'].value_counts()
     dff1 = count_ds_R.to_csv(mb_userpath / f"{fname}_test3.csv", sep=',')
     dff2 = pd.read_csv(mb_userpath / f"{fname}_test3.csv", sep = ',')
-    count_ds_R2 = dff2.sort_values(by=[col_name])
+    count_ds_R2 = dff2.sort_values(by=col_name)
     df = count_ds_R2.to_csv(mb_userpath / f"{fname}_count_Rs_so.csv", index = False)
     df1 = pd.read_csv(mb_userpath / f"{fname}_count_Rs_so.csv")
     df1['index_diff'] = df1[col_name].diff() 
